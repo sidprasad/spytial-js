@@ -117,3 +117,29 @@ The registry remains an escape hatch for classes that cannot be edited.
 Attachment does **not** imply selector scoping. The user explicitly rejected
 implicit scoping to the declaring type. An integration skill should elicit that
 choice rather than assume decorators change selector meaning.
+
+## MiniZinc solution demo
+
+The map-coloring demo adds evidence for integrations that consume solver output:
+
+- A solution array is not the domain graph. The application supplies the meaning
+  of its one-based indices and the fixed topology. Seven persistent region
+  objects receive new color values; aliases and IDs survive solution browsing.
+- Recovery and presentation remain separate. Region adjacency uses ordinary JS
+  arrays, recovered with slot atoms. The class specification derives a direct
+  `border` relation with `inferredEdge('border', 'adjacent.item.value')` and hides
+  the container nodes without deleting them from the relational snapshot.
+- Structural rules live in `static [spytial]`. Per-solution colors use call-site
+  rules over explicitly authored selectors such as `Coloring.WA`. No selector
+  is implicitly restricted to its declaring type.
+- Unsatisfiable model results belong to the host application's status UI, not
+  Spytial's layout-conflict diagnostics. Clear the old assignment so it cannot
+  masquerade as a solution to the new parameters.
+- Bound enumeration and own the worker lifecycle. This example collects at most
+  24 solutions before browsing, supports cancellation, and terminates active and
+  pooled MiniZinc workers. It does not enqueue a render for every solver event.
+
+The browser acceptance test uses actual CDN MiniZinc/Gecode output and checks
+border endpoints, node fills, unsatisfiability, identity, paging, and cancellation
+followed by another solve. These are stronger evidence than a hard-coded valid
+assignment or checking only that the renderer produced an SVG.

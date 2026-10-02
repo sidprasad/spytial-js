@@ -23,6 +23,33 @@ values, and a cyclic structure containing arrays, a Map, and a Set. An internet
 connection is needed for the default core CDN load. Serve over HTTP rather than
 opening `file://` URLs, because this integration uses browser modules.
 
+### MiniZinc solution diagrams
+
+Open [`examples/minizinc/`](examples/minizinc/) for a live map-coloring demo.
+Choose 2–4 colors, solve, and browse up to 24 assignments. Two colors proves
+unsatisfiable; three and four produce diagrams. The model, solution JSON, and
+an accessible assignment table sit beside the graph. Cancellation stops the
+solver, and each run clears the previous assignment before starting.
+
+The demo loads [minizinc-js](https://github.com/MiniZinc/minizinc-js) 4.3.1 from
+jsDelivr on demand. Gecode runs in a WebAssembly worker; there is no solver
+server or native MiniZinc installation. The initial asset download can take a
+moment. Serve over HTTP with internet access; no special isolation headers are
+required. A strict CSP must permit the CDN scripts/assets and blob workers.
+
+`examples/minizinc/data.js` builds persistent region objects from the model's
+topology, maps one-based solution integers to color names, and validates every
+assignment. Class-local rules turn `adjacent.item.value` into border edges and
+hide array/slot nodes. Per-solution style rules supply the colors; `view.update`
+keeps object IDs across assignments. The raw captured data still contains the
+array structure. This is a demo-specific model adapter, not a generic MiniZinc
+schema inference layer.
+
+Visit `/test/minizinc.html` for the optional real-browser MiniZinc checks
+(requires network and WebAssembly). These exercise the CDN solver, solution
+browsing, color fills, unsatisfiability, bounded enumeration, and cancellation.
+They are separate from `npm test` so offline unit checks do not download a solver.
+
 ## Smallest embedding
 
 ```html

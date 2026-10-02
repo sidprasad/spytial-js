@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MiniZinc × Spytial · Color the map</title>
+<style>
+  :root { font-family: system-ui, sans-serif; color: #20352d; background: #f5f5f0; color-scheme: light; }
+  body { max-width: 1160px; margin: auto; padding: 32px 24px 60px; }
+  a { color: #205b40; } h1 { font-size: clamp(2rem, 5vw, 3.6rem); letter-spacing: -.05em; margin: 16px 0; }
+  h2 { font-size: 1.15rem; margin: 0 0 12px; } p { line-height: 1.6; max-width: 800px; }
+  .eyebrow { margin-top: 28px; color: #49785d; text-transform: uppercase; font-size: .75rem; letter-spacing: .15em; font-weight: 700; }
+  .controls, .legend, .paging { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+  button, select { font: inherit; padding: 10px 14px; border-radius: 7px; border: 1px solid #ccd9ce; }
+  button { background: #205b40; color: white; cursor: pointer; } button:disabled { opacity: .45; cursor: default; }
+  #cancel, .paging button { background: white; color: #205b40; }
+  #status { min-height: 1.6em; } .error { color: #963522; }
+  .grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 24px; }
+  article, aside { min-width: 0; padding: 20px; border: 1px solid #d6dfd6; border-radius: 16px; background: white; }
+  .legend { font-size: .85rem; margin: 12px 0; } .swatch { display: inline-block; width: 12px; height: 12px; border: 1px solid #a7b3a8; border-radius: 50%; margin-right: 5px; }
+  .note { font-size: .85rem; color: #52655b; } pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .8rem; line-height: 1.6; padding: 14px; background: #edf2ed; border-radius: 8px; }
+  summary { cursor: pointer; margin-top: 18px; } table { width: 100%; border-collapse: collapse; font-size: .9rem; } td, th { padding: 8px 4px; border-bottom: 1px solid #e6ece6; text-align: left; }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } body { padding: 22px 12px; } }
+</style>
+<header>
+  <a href="../">← JavaScript examples</a>
+  <div class="eyebrow">MiniZinc × Spytial</div>
+  <h1>One map. Many solutions.</h1>
+  <p>Give neighboring regions different colors. MiniZinc finds valid assignments; ordinary JavaScript objects carry each solution into a Spytial diagram. Try two colors to see why the map needs three.</p>
+</header>
+<div class="controls">
+  <label for="colors">Available colors</label>
+  <select id="colors"><option value="2">2 colors</option><option value="3" selected>3 colors</option><option value="4">4 colors</option></select>
+  <button id="solve" disabled>Solve map</button>
+  <button id="cancel" disabled>Cancel</button>
+</div>
+<p id="status" role="status" aria-live="polite">Loading the diagram…</p>
+<main class="grid">
+  <article>
+    <h2>Regions and borders</h2>
+    <div class="legend" id="legend"></div>
+    <div id="diagram"></div>
+    <div class="paging"><button id="previous" disabled>← Previous</button><span id="position">No solution selected</span><button id="next" disabled>Next →</button></div>
+    <p class="note">Lines mark shared borders, regardless of arrow direction. This is a schematic, not a geographic map. Tasmania has no land border. WA and Tasmania are fixed to Coral to reduce equivalent solutions.</p>
+  </article>
+  <aside>
+    <h2>Current assignment</h2>
+    <table><thead><tr><th>Region</th><th>Color</th></tr></thead><tbody id="assignment"></tbody></table>
+    <details><summary>MiniZinc model</summary><pre id="model"></pre></details>
+    <details><summary>Solution JSON</summary><pre id="solution">No solution yet.</pre></details>
+    <details><summary>JavaScript integration</summary><pre>const graph = new Coloring();
+const view = await diagram('#diagram', graph, { registry });
+
+// Map solution integers onto existing region objects.
+const rules = applySolution(graph, solution.color, 3);
+await view.update(graph, { spec: rules });</pre></details>
+  </aside>
+</main>
+<p class="note">Runs locally in your browser with <a href="https://github.com/MiniZinc/minizinc-js">minizinc-js</a> (Gecode / WebAssembly) and Spytial. Requires an internet connection for the pinned CDN assets. Collects up to 24 solutions per run.</p>
+<script type="module" src="./demo.js"></script>
+</html>
