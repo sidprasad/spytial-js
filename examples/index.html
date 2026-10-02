@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spytial · JavaScript, in place</title>
+<style>
+  :root { color-scheme: light; font-family: system-ui, sans-serif; color: #20352d; background: #f5f5f0; }
+  body { max-width: 1160px; margin: 0 auto; padding: 40px 24px 70px; }
+  h1 { font-size: clamp(2rem, 5vw, 3.8rem); letter-spacing: -.05em; margin: 10px 0 16px; }
+  h2 { margin: 0 0 8px; font-size: 1.3rem; }
+  p { line-height: 1.6; max-width: 760px; }
+  .eyebrow { color: #49785d; text-transform: uppercase; font-size: .75rem; letter-spacing: .15em; font-weight: 700; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 32px; }
+  article { min-width: 0; padding: 22px; border: 1px solid #d6dfd6; border-radius: 16px; background: white; }
+  button { background: #205b40; color: white; border: 0; border-radius: 7px; padding: 10px 15px; cursor: pointer; font: inherit; }
+  button:disabled { opacity: .5; cursor: wait; }
+  pre { overflow: auto; padding: 18px; background: #edf2ed; border-radius: 8px; font-size: .8rem; line-height: 1.6; }
+  .spytial-js-status, #status { font-size: .85rem; color: #8b391c; }
+  .wide { grid-column: 1 / -1; }
+  code { font-family: ui-monospace, monospace; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } body { padding: 24px 12px; } }
+</style>
+<header>
+  <div class="eyebrow">Spytial for client-side JavaScript</div>
+  <h1>Your objects. In your page.</h1>
+  <p>Run ordinary JavaScript, then draw the state exactly where it belongs. These diagrams share the page with application code; each has its own data, rules, and lifecycle.</p>
+  <p id="status" role="status">Loading the pinned Spytial engine…</p>
+</header>
+<main class="grid">
+  <article>
+    <h2>A binary search tree</h2>
+    <p>Rules belong to the node class. Change the tree, then explicitly update the diagram.</p>
+    <button id="insert" disabled>Insert 5</button>
+    <div id="tree"></div>
+    <pre><code>root.left.right.left = new TreeNode(5);
+await treeView.update();</code></pre>
+  </article>
+  <article>
+    <h2>A JavaScript dictionary</h2>
+    <p>Dictionary entries preserve keys. Two entries pointing to one object share a single node.</p>
+    <button id="change" disabled>Update shared stock</button>
+    <div id="dictionary"></div>
+    <pre><code>stock.count += 1;
+await dictionaryView.update();</code></pre>
+  </article>
+  <article class="wide">
+    <h2>Arrays, maps, and cycles</h2>
+    <p>Array slots preserve repeated values and sparse indices. Map keys can be objects. Cycles end at the same node, not a copied subtree.</p>
+    <div id="collections"></div>
+    <details><summary>Inspect the relational data and rules</summary><pre id="payload"></pre></details>
+  </article>
+</main>
+<script type="module" src="./demo.js"></script>
+</html>

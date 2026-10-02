@@ -1,0 +1,19 @@
+{
+  "name": "spytial-js",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser-native JavaScript values to embedded Spytial diagrams",
+  "exports": { ".": { "types": "./index.d.ts", "default": "./index.js" } },
+  "types": "./index.d.ts",
+  "repository": { "type": "git", "url": "https://github.com/sidprasad/spytial-js.git" },
+  "scripts": {
+    "test": "node scripts/generate.mjs --check && node --test test/*.test.js",
+    "codegen": "node scripts/generate.mjs",
+    "codegen:check": "node scripts/generate.mjs --check",
+    "sync:core": "node scripts/sync-core.mjs",
+    "serve": "python3 -m http.server 8088 --bind 127.0.0.1"
+  },
+  "engines": { "node": ">=22" },
+  "devDependencies": { "ajv": "^8.20.0", "typescript": "^5.8.3" }
+}
